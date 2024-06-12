@@ -866,14 +866,16 @@ void Monster::doAttacking(uint32_t interval) {
 	const Position &myPos = getPosition();
 	const Position &targetPos = attackedCreature->getPosition();
 
+	uint32_t index = 0;
 	for (const spellBlock_t &spellBlock : mType->info.attackSpells) {
+		index++;
 		bool inRange = false;
 
 		if (spellBlock.spell == nullptr || (spellBlock.isMelee && isFleeing())) {
 			continue;
 		}
 
-		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
+		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks, index)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (updateLook) {
 					updateLookDirection();
@@ -888,6 +890,8 @@ void Monster::doAttacking(uint32_t interval) {
 				}
 
 				spellBlock.spell->castSpell(getMonster(), attackedCreature);
+
+				spellCooldowns[index] = OTSYS_TIME() + spellBlock.cooldown;
 
 				if (spellBlock.isMelee) {
 					extraMeleeAttack = false;
@@ -924,8 +928,12 @@ bool Monster::canUseAttack(const Position &pos, const std::shared_ptr<Creature> 
 	return true;
 }
 
-bool Monster::canUseSpell(const Position &pos, const Position &targetPos, const spellBlock_t &sb, uint32_t interval, bool &inRange, bool &resetTicks) {
+bool Monster::canUseSpell(const Position &pos, const Position &targetPos, const spellBlock_t &sb, uint32_t interval, bool &inRange, bool &resetTicks, uint32_t index) {
 	inRange = true;
+
+	if (spellCooldowns[index] && spellCooldowns[index] > OTSYS_TIME()) {
+		return false;
+	}
 
 	if (sb.isMelee && isFleeing()) {
 		return false;

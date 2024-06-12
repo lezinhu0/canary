@@ -33,6 +33,7 @@ struct spellBlock_t {
 	spellBlock_t(spellBlock_t &&other) noexcept :
 		spell(other.spell),
 		chance(other.chance),
+		cooldown(other.cooldown),
 		speed(other.speed),
 		range(other.range),
 		minCombatValue(other.minCombatValue),
@@ -46,6 +47,7 @@ struct spellBlock_t {
 	uint32_t chance = 100;
 	uint32_t speed = 2000;
 	uint32_t range = 0;
+	uint32_t cooldown = 0;
 	int32_t minCombatValue = 0;
 	int32_t maxCombatValue = 0;
 	bool combatSpell = false;
@@ -220,6 +222,8 @@ public:
 	uint8_t range = 0;
 
 	uint16_t interval = 2000;
+	
+	uint32_t cooldown = 0;
 
 	int32_t minCombatValue = 0;
 	int32_t maxCombatValue = 0;

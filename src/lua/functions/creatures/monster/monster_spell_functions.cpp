@@ -306,3 +306,20 @@ int MonsterSpellFunctions::luaMonsterSpellImpactSound(lua_State* L) {
 	}
 	return 1;
 }
+
+int MonsterSpellFunctions::luaMonsterSpellSetCooldown(lua_State* L) {
+	auto spell = getUserdataShared<MonsterSpell>(L, 1);
+
+	if (lua_gettop(L) < 2) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto cooldown = getNumber<uint32_t>(L, 2);
+
+	spell->cooldown = cooldown;
+
+	pushBoolean(L, true);
+
+	return 1;
+}

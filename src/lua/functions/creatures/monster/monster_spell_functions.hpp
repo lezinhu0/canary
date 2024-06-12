@@ -20,6 +20,7 @@ public:
 		registerMethod(L, "MonsterSpell", "setScriptName", MonsterSpellFunctions::luaMonsterSpellSetScriptName);
 		registerMethod(L, "MonsterSpell", "setChance", MonsterSpellFunctions::luaMonsterSpellSetChance);
 		registerMethod(L, "MonsterSpell", "setInterval", MonsterSpellFunctions::luaMonsterSpellSetInterval);
+		registerMethod(L, "MonsterSpell", "setCooldown", MonsterSpellFunctions::luaMonsterSpellSetCooldown);
 		registerMethod(L, "MonsterSpell", "setRange", MonsterSpellFunctions::luaMonsterSpellSetRange);
 		registerMethod(L, "MonsterSpell", "setCombatValue", MonsterSpellFunctions::luaMonsterSpellSetCombatValue);
 		registerMethod(L, "MonsterSpell", "setCombatType", MonsterSpellFunctions::luaMonsterSpellSetCombatType);
@@ -66,4 +67,5 @@ private:
 	static int luaMonsterSpellSetOutfitItem(lua_State* L);
 	static int luaMonsterSpellCastSound(lua_State* L);
 	static int luaMonsterSpellImpactSound(lua_State* L);
+	static int luaMonsterSpellSetCooldown(lua_State* L);
 };
