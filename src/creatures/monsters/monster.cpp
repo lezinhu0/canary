@@ -1290,12 +1290,20 @@ void Monster::onThinkTarget(uint32_t interval) {
 						challengeFocusDuration = 0;
 					}
 
-					if (m_monsterType->info.changeTargetChance >= uniform_random(1, 100)) {
-						if (m_monsterType->info.targetDistance <= 1) {
-							searchTarget(TARGETSEARCH_RANDOM);
-						} else {
-							searchTarget(TARGETSEARCH_NEAREST);
-						}
+					auto totalChance = 0;
+					totalChance += mType->info.strategiesTargetNearest;
+					totalChance += mType->info.strategiesTargetHealth;
+					totalChance += mType->info.strategiesTargetDamage;
+					totalChance += mType->info.strategiesTargetRandom;
+					auto random = uniform_random(1, totalChance);
+					if (random <= mType->info.strategiesTargetNearest) {
+						searchTarget(TARGETSEARCH_NEAREST);
+					} else if (random <= mType->info.strategiesTargetHealth) {
+						searchTarget(TARGETSEARCH_HP);
+					} else if (random <= mType->info.strategiesTargetDamage) {
+						searchTarget(TARGETSEARCH_DAMAGE);
+					} else {
+						searchTarget(TARGETSEARCH_RANDOM);
 					}
 				}
 			}
